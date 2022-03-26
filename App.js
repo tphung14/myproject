@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios';
+
 function App() {
   const [backendData, setBackendData] = useState([{}])
 
@@ -12,81 +12,78 @@ function App() {
     ).then(
       //get the data from the json and set it to the backendData variable
       data => {
+        console.log(data)
         setBackendData(data)
       }
     )
   }, []/*[] it makes sure to start only on the first render of the page*/);
-  const [secondBackendData, setSecondBackendData] = useState([{}])
-  useEffect(() => {
-    fetch('/home').then(
+
+ const [secondBackendData, setSecondBackendData]= useState([{}])
+ useEffect(() => {
+
+    // fetch api from backend
+    fetch('/testData').then(
+      //whatever response we get from the api it will be in json format
       response => response.json()
     ).then(
+      //get the data from the json and set it to the backendData variable
       data => {
+        console.log(data)
         setSecondBackendData(data)
       }
     )
-  })
-  const [num1, setNum1] = useState([{}]);
-  const [num2, setNum2] = useState([{}]);
-  const [sum, setSum] = useState([{}]);
-  var nums = { "num1": num1, "num2": num2 };
-  //react function components must start with capitalized letters
+  },[]);
+
+  const [fname, setfname] = useState([{}]);
+  const [lname, setlname] = useState([{}]);
+  const [location, setlocation] = useState([{}]);
+  var request = { "firstname": fname, "lastname": lname, "location":location };
+  const [serverResponse, setResponse]=useState([{}]);
   var HandleSubmit = function (event) {
     event.preventDefault();
     alert('form submitted');
-    console.log(nums);
+    console.log(request);
     //
-    fetch('http://localhost:5000/data', {
+    fetch('http://localhost:5000/testDataResponse', {
       method: 'POST',
       mode: 'cors',
       headers: { "Content-Type": "application/json" },
       //convert react state to json and send it as the post body
-      body: JSON.stringify(nums)
+      body: JSON.stringify(request)
     }).then((response) => response.json()
     ).then(data => {
       console.log(data);
-      setSum(data)
+      setResponse(data)
     })
   }
-  /*var handleSubmit = function(e) {
-    e.preventDefault()
-    axios.post('/data', nums).then(() =>
-      console.log('nums sent')).catch(err => {
-        console.error(err);
-      });
-  };*/
-  /*useEffect(function(){
-    alert('form submitted');
-  fetch('http://localhost:5000/data',{
-    method:'POST',
-    //convert react state to json and send it as the post body
-    body:JSON.stringify(nums)
-  }).then(function(response){
-    console.log(response)
-    return response.json();
-  });
-  })*/
   return (
     <div>
-      {(typeof backendData.users === 'undefined') ? (
+      {(typeof secondBackendData === 'undefined') ? (
         <p>loading...</p>
       ) : (
-        backendData.users.map((user, i) => (
-          <p key={i}>{user}</p>
+        secondBackendData.map((user) => (
+          <p>{user.firstname} {user.lastname} is from {user.location}</p>
         ))
       )}
-      <p>{secondBackendData.string}</p>
-      <p>{secondBackendData.number}</p>
       <form onSubmit={HandleSubmit}>
         <label>
-          Enter first num: <input type="number" onChange={e => setNum1(e.target.value)} />
+          Enter first name: <input type="text" onChange={e => setfname(e.target.value)} />
         </label>
         <label>
-          Enter second num: <input type="number" onChange={e => setNum2(e.target.value)} />
+          Enter last name: <input type="text" onChange={e => setlname(e.target.value)} />
+        </label>
+        <label>
+          Enter location: <input type="text" onChange={e => setlocation(e.target.value)} />
         </label>
         <input type="submit" value="Submit"></input>
       </form>
-      <h1>sum:{sum.sum} </h1>
+      {(typeof serverResponse === 'undefined') ? (
+        <p>loading...</p>
+      ) : (
+        serverResponse.map((user) => (
+          <p>{user.firstname} {user.lastname} is from {user.location}</p>
+        ))
+      )}
     </div>
   )
 }
