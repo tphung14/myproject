@@ -21,17 +21,17 @@ const questions=
   question2: [
     {
       id: [2,1],
-      description : "Machine",
+      description : "Gym",
       img: "https://www.firstbenefits.org/wp-content/uploads/2017/10/placeholder.png"
     },
     {
       id: [2,2],
-      description : "Bodyweight",
+      description : "Home",
       img: "https://www.firstbenefits.org/wp-content/uploads/2017/10/placeholder.png"
     },
     {
       id: [2,3],
-      description : "Specialize",
+      description : "Specialize/Both",
       img: "https://www.firstbenefits.org/wp-content/uploads/2017/10/placeholder.png"
     }
   ],
